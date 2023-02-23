@@ -5,14 +5,18 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "start":"nodemon app.js"
+    "start": "pm2 start app.js",
+    "deploy": "heroku container:push web -a socket-io-chat-live && heroku container:release web -a socket-io-chat-live"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "nodemon": "^2.0.20",
+    "pm2": "^5.2.2",
     "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

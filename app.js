@@ -9,7 +9,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://batarilo.me"],
     methods: ["POST", "GET"],
   },
 });
@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
     console.log("User disconnected.");
   });
 });
-
-server.listen(3001, () => {
-  console.log("Chat server running on port 3001..");
+const port = process.env.PORT || 3200;
+server.listen(port, () => {
+  console.log("Chat server running on port", port);
 });
