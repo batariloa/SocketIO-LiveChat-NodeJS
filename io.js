@@ -22,17 +22,22 @@ function setIOEvents(io) {
     socket.on("join_room", async ({ room, username }) => {
       usernameCon = username;
       roomCon = room;
-      await socket.join(room);
 
-      const newUser = { id: socket.id, username };
+      try {
+        await socket.join(room);
 
-      if (!userDict[room]) userDict[room] = [];
+        const newUser = { id: socket.id, username };
 
-      //add user to list
-      userDict[room] = [...userDict[room], newUser];
+        if (!userDict[room]) userDict[room] = [];
 
-      //emit user list to all users
-      await io.in(room).emit("users", userDict[room]);
+        //add user to list
+        userDict[room] = [...userDict[room], newUser];
+
+        //emit user list to all users
+        await io.in(room).emit("users", userDict[room]);
+      } catch (error) {
+        socket.emit("join_error", "Failed to join.");
+      }
     });
 
     socket.on("send_message", (messageData) => {
@@ -43,7 +48,7 @@ function setIOEvents(io) {
     socket.on("disconnect", () => {
       console.log("User disconnecting..");
 
-      if (!roomCon || !usernameCon) return;
+      if (!roomCon || !usernameCon || !userDict[room]) return;
       // remove the user from the user list of that room
       userDict[roomCon] = userDict[roomCon].filter(
         (user) => user.id !== socket.id
