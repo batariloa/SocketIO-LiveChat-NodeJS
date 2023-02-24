@@ -6,6 +6,9 @@ COPY ./ ./
 RUN npm i
 # Set the PORT environment variable to the value of the Heroku $PORT variable
 ENV PORT $PORT
+ENV NODE_ENV production
+
 EXPOSE 3200
 EXPOSE $PORT
+
 CMD ["npm", "run", "start"]
